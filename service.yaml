@@ -1,0 +1,45 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: database
+  labels:
+    app: flask-database
+spec:
+  selector:
+    app:  flask-database
+  type:  NodePort
+  ports:
+  - name:  flask-database
+    port:  5000
+    targetPort:  5000
+
+--- 
+kind: Service
+apiVersion: v1
+metadata:
+  name:  users
+  labels:
+    app: users
+spec:
+  selector:
+    app: users
+  type:  NodePort
+  ports:
+  - name: users
+    port:  8000
+    targetPort:  8000
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongodb
+spec:
+  selector:
+    app: mongodb
+  type:   ClusterIP 
+  ports:
+  - name: mongodb
+    port:  27017
+    targetPort:  27017
+

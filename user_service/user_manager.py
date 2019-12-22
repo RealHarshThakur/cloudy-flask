@@ -4,8 +4,11 @@ from flask_bcrypt import Bcrypt
 from validate_email import validate_email
 import requests
 import json
+import os
 
-database_url = "http://localhost:5000/database/"
+databasesvc_url = os.environ["DATABASE_SERVICE_HOST"]
+databasesvc_port = os.environ["DATABASE_PORT_5000_TCP_PORT"]
+database_url = "http://"+databasesvc_url+":"+ databasesvc_port + "/database"
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 ns = Namespace('users')

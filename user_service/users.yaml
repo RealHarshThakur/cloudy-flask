@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  flask-user
+  labels:
+    name:  flask-user
+    app: flask-user
+spec:
+  selector:
+    matchLabels:
+      name: flask-user
+      app: users
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name:  flask-user
+        app: users
+    spec:
+      containers:
+      - image:  harshthakur/flask-users:latest
+        name:  users
+        command: ["flask" ,"run","--host=0.0.0.0","--port=8000"]
+        env:
+        - name:  FLASK_APP
+          value:  user_manager.py       
+        ports:
+        - containerPort:  5000
+          name:  flask-user
+        imagePullPolicy: Never  

@@ -2,9 +2,12 @@ from flask_pymongo import PyMongo
 from flask import Flask, request,jsonify
 from flask_restplus import fields, Api, Namespace, Resource, marshal
 import json
+import os 
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/users"
+mongodb_ip = os.environ["MONGODB_SERVICE_HOST"]
+mongodb_port = os.environ["MONGODB_PORT_27017_TCP_PORT"]
+app.config["MONGO_URI"] = "mongodb://"+mongodb_ip+":"+mongodb_port+"/users"
 mongo = PyMongo(app)
 db_ns = Namespace('database')
 api = Api()
@@ -48,7 +51,7 @@ class Data(Resource):
         db_users = mongo.db.users
         result = []
         for u in db_users.find():
-            result.append({'username':str(u['username'])})
+            result.append({'username':str(u['name'])})
             db_users.remove(u)
         return result    
 

@@ -1,20 +1,21 @@
 from user_manager import User, Username, app, bcrypt, fields, api, Namespace, Resource
 
-ns1 = Namespace('login')
-api.add_namespace(ns1)
-login_model = ns1.model('Login Details',{
+login_ns = Namespace('login')
+register_ns = Namespace('register')
+api.add_namespace(login_ns)
+login_model = login_ns.model('Login Details',{
     'email': fields.String(required=True),
     'password': fields.String(required=True)
 })
 
 
-@ns1.route('/')
+@login_ns.route('/')
 class Login(Resource):
-    @ns1.doc('Login')
-    @ns1.expect(login_model)
+    @login_ns.doc('Login')
+    @login_ns.expect(login_model)
     def post(self):
-        email = ns1.payload['email']
-        password = ns1.payload['password']
+        email = login_ns.payload['email']
+        password = login_ns.payload['password']
         email_finder = db_users.find_one({'email':email})
         if email_finder:
             validate_password = bcrypt.check_password_hash(email_finder['password'],password)
