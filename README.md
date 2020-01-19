@@ -1,4 +1,4 @@
-# flask-restplus-app
+# Cloudy-Flask
 Started out this project to learn about developing and deploying microservices using Cloud native projects. 
 This repo contains microservices implemented using Python's Flask-restplus to create backend services by taking a cloud native approach. The project starts out with the application running on Docker and later branches out to running on Kubernetes. 
 
