@@ -28,7 +28,7 @@ Application is backed by Mongodb which is exposed by a REST API.
  
 ## ci.sh
 This script is very useful to save bandwidth when you're developing locally. It pushes a local docker image to the minikube cluster by taking the name of the image as an argument. To utilise it move into the directory where your Dockerfile is in and type:
-- \<Path>/ci.sh \<name of the docker image>
+- \<Path>/ci.sh \<name of the docker image> \<name of the deployment>
 
 # Goals of the web app is(Note: This is not a chronological sequence) :
 - Have a database to store user data
