@@ -24,6 +24,8 @@ Application is backed by Mongodb which is exposed by a REST API.
  
  Informatioin about generic files will be mentioned here.
  
+ All the services require you to build the image and push it to your local kubernetes cluster. You can use the ci.sh script below to do just that.
+ 
  ## service.yaml
  To view the app locally we expose it from the minikube cluster to our local VM using a service.
  - kubectl create -f service.yaml
