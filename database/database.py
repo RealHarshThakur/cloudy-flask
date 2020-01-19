@@ -1,5 +1,5 @@
 from flask_pymongo import PyMongo
-from flask import Flask, request,jsonify
+from flask import Flask, request,jsonify, make_response
 from flask_restplus import fields, Api, Namespace, Resource, marshal
 import json
 import os 
@@ -16,7 +16,8 @@ api.init_app(app)
 users_model = db_ns.model('User Details',{
     'email': fields.String(required=True),
     'name': fields.String(required=True),
-    'password': fields.String(required=True)
+    'password': fields.String(required=True),
+    'role': fields.String(required=True)
 })
 
 @db_ns.route('/')
@@ -27,7 +28,7 @@ class Data(Resource):
         db_users = mongo.db.users
         result = []
         for u in db_users.find():
-            result.append({'username':u['name'],'password':u['password'],'email':u['email']})
+            result.append({'username':u['name'],'password':u['password'],'email':u['email'],'role':u['role']})
         return result
     
     @db_ns.doc("Post data")
@@ -37,14 +38,15 @@ class Data(Resource):
         username = db_ns.payload['name']
         password = db_ns.payload['password']
         email = db_ns.payload['email']
+        role = db_ns.payload['role']
         email_finder = db_users.find_one({"email":email})
         if email_finder:
-            return "Error:Email already taken"
+            return  make_response("Error:Email already taken", 404)
         else:
-            data = {'name':username,'password':password,'email':email}
+            data = {'name':username,'password':password,'email':email, 'role': role}
             db_users.insert(data)
             result = json.dumps(marshal(data, users_model,ordered=True))
-            return result
+            return make_response(jsonify("Msg:User added"), 200)
         
     @db_ns.doc('Deleted all data from the database')
     def delete(self):
@@ -53,7 +55,7 @@ class Data(Resource):
         for u in db_users.find():
             result.append({'username':str(u['name'])})
             db_users.remove(u)
-        return result    
+        return make_response(jsonify("Msg: Users deleted"),200)    
 
 @db_ns.doc("email")
 @db_ns.route('/<email>')
@@ -63,9 +65,9 @@ class Username(Resource):
         db_users = mongo.db.users
         email_finder = db_users.find_one({"email":email})
         if email_finder:
-            result = {'username': email_finder['name'],'password':email_finder['password'],'email':email_finder['email']}
-            return result
-        return {"Error:User not found"},404
+            result = {'username': email_finder['name'],'password':email_finder['password'],'email':email_finder['email'],'role':email_finder['role']}
+            return make_response(result,200)
+        return make_response("Error:User not found",404)
 
     @db_ns.doc("Delete user")
     def delete(self,email):
@@ -74,9 +76,9 @@ class Username(Resource):
         if email_finder:
             db_users.remove(email_finder)
             deleted_user = {'User deleted':email_finder['name']}
-            return deleted_user
+            return make_response(jsonify("Msg: User deleted",200))
         else: 
-            return "Error:User not found",404
+            return make_response("Error:User not found",404)
 
 
 
