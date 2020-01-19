@@ -7,3 +7,6 @@ I've written a template which can be easily modified where users are classified 
 - Root
 
 I've also written decorators for the users type which you can easily use in the users actions to restrict or permit access.
+
+To start this microservice, run :
+- kubectl create -f users.yaml
