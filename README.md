@@ -19,6 +19,9 @@ Application is backed by Mongodb which is exposed by a REST API.
 - Implemented the Email API
 - Service Discovery is done natively by Kubernetes's CoreDNS
 
+# TODO
+- Integrate Hashicorp's Vault for secrets(API keys, passwords)
+
 # Setup
  Each directory would have detailed instructions about setting up the specific component. 
  
